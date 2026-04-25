@@ -52,37 +52,166 @@ It calculates legal shares according to **Hanafi, Shia, Christian, and Hindu** l
 
 ## 📁 Project Structure
 ```python
-    HackDataV1/
-├── backend/ # FastAPI backend
-│ ├── app/
-│ │ ├── api/v1/routes/ # 8 route modules
-│ │ ├── services/ # Wrappers for core logic
-│ │ ├── schemas/ # Pydantic models
-│ │ ├── core/ # config, logger
-│ │ └── main.py
-│ └── requirements.txt
-├── frontend/ # React frontend
-│ ├── src/
-│ │ ├── features/calculator/
-│ │ ├── features/chatbot/
-│ │ ├── components/common/
-│ │ ├── services/api.js
-│ │ └── App.jsx
-│ └── package.json
-├── core/ # Deterministic business logic
-│ ├── knowledge_base.py # rules, tax tables, fraud patterns
-│ ├── faraid_engine.py
-│ ├── dispute_detector.py
-│ ├── tax_engine.py
-│ └── process_navigator.py
-├── ai/ # AI modules (NLP, chatbot)
-│ ├── nlp_parser.py
-│ ├── chatbot.py
-│ └── doc_generator.py
-├── docs/ # PDF templates & builder
-│ ├── pdf_builder.py
-│ └── templates/
-└── app.py (optional – legacy Streamlit app)
+
+```
+├── 📁 ai
+│   ├── 🐍 __init__.py
+│   ├── 🐍 chatbot.py
+│   ├── 🐍 doc_generator.py
+│   ├── 🐍 nlp_parser.py
+│   ├── 🐍 test_gemini_simple.py
+│   └── 🐍 urdu_explainer.py
+├── 📁 backend
+│   └── 📁 app
+│       ├── 📁 api
+│       │   ├── 📁 v1
+│       │   │   ├── 📁 routes
+│       │   │   │   ├── 🐍 __init__.py
+│       │   │   │   ├── 🐍 chat_routes.py
+│       │   │   │   ├── 🐍 dispute_routes.py
+│       │   │   │   ├── 🐍 document_routes.py
+│       │   │   │   ├── 🐍 inheritance_routes.py
+│       │   │   │   ├── 🐍 nlp_routes.py
+│       │   │   │   ├── 🐍 process_routes.py
+│       │   │   │   ├── 🐍 tax_routes.py
+│       │   │   │   └── 🐍 verify_routes.py
+│       │   │   ├── 🐍 __init__.py
+│       │   │   └── 🐍 api.py
+│       │   └── 🐍 __init__.py
+│       ├── 📁 core
+│       │   ├── 🐍 __init__.py
+│       │   ├── 🐍 config.py
+│       │   └── 🐍 logger.py
+│       ├── 📁 schemas
+│       │   ├── 🐍 __init__.py
+│       │   ├── 🐍 common.py
+│       │   ├── 🐍 document_schemas.py
+│       │   ├── 🐍 inheritance_schemas.py
+│       │   └── 🐍 nlp_schemas.py
+│       ├── 📁 services
+│       │   ├── 🐍 __init__.py
+│       │   ├── 🐍 chat_service.py
+│       │   ├── 🐍 dispute_service.py
+│       │   ├── 🐍 document_service.py
+│       │   ├── 🐍 inheritance_service.py
+│       │   ├── 🐍 local_mufti_verification.py
+│       │   ├── 🐍 nlp_service.py
+│       │   ├── 🐍 process_service.py
+│       │   └── 🐍 tax_service.py
+│       ├── 🐍 __init__.py
+│       └── 🐍 main.py
+├── 📁 core
+│   ├── 🐍 __init__.py
+│   ├── 🐍 dispute_detector.py
+│   ├── 🐍 faraid_engine.py
+│   ├── 🐍 knowledge_base.py
+│   ├── 🐍 process_navigator.py
+│   ├── 🐍 scenario_types.py
+│   └── 🐍 tax_engine.py
+├── 📁 data
+│   ├── ⚙️ fbr_rates_2025.json
+│   ├── ⚙️ legal_references.json
+│   └── ⚙️ nadra_process.json
+├── 📁 docs
+│   ├── 📁 fonts
+│   │   └── 📄 NotoNastaliqUrdu.ttf
+│   ├── 📁 templates
+│   │   ├── 📕 WarisNama_AI_Complete_Blueprint..pdf
+│   │   ├── 🐍 __init__.py
+│   │   ├── 🐍 fir_draft.py
+│   │   ├── 🐍 legal_notice.py
+│   │   └── 🐍 share_certificate.py
+│   ├── 🐍 __init__.py
+│   └── 🐍 pdf_builder.py
+├── 📁 frontend
+│   ├── 📁 public
+│   ├── 📁 src
+│   │   ├── 📁 app
+│   │   │   ├── 📄 App.jsx
+│   │   │   └── 📄 store.jsx
+│   │   ├── 📁 components
+│   │   │   ├── 📁 common
+│   │   │   │   ├── 📄 Button.jsx
+│   │   │   │   ├── 📄 Input.jsx
+│   │   │   │   ├── 📄 Loader.jsx
+│   │   │   │   └── 📄 VoiceButton.jsx
+│   │   │   └── 📁 layout
+│   │   │       ├── 📄 Layout.jsx
+│   │   │       └── 📄 Sidebar.jsx
+│   │   ├── 📁 features
+│   │   │   ├── 📁 calculator
+│   │   │   │   ├── 📁 components
+│   │   │   │   │   └── 📄 MuftiVerificationModal.jsx
+│   │   │   │   ├── 📁 pages
+│   │   │   │   │   └── 📄 CalculatorPage.jsx
+│   │   │   │   ├── 📁 services
+│   │   │   │   │   └── 📄 calculatorService.js
+│   │   │   │   └── 📁 utils
+│   │   │   │       └── 📄 certificateHelper.js
+│   │   │   └── 📁 chatbot
+│   │   │       ├── 📁 components
+│   │   │       │   └── 📄 ChatWindow.jsx
+│   │   │       ├── 📁 hooks
+│   │   │       │   └── 📄 useChatbot.js
+│   │   │       ├── 📁 pages
+│   │   │       │   └── 📄 ChatbotPage.jsx
+│   │   │       └── 📁 services
+│   │   │           └── 📄 chatbotService.js
+│   │   ├── 📁 hooks
+│   │   │   └── 📄 useApi.js
+│   │   ├── 📁 pages
+│   │   │   └── 📄 NotFound.jsx
+│   │   ├── 📁 routes
+│   │   │   └── 📄 AppRoutes.jsx
+│   │   ├── 📁 services
+│   │   │   ├── 📄 api.js
+│   │   │   └── 📄 endpoints.js
+│   │   ├── 📁 utils
+│   │   ├── 🎨 index.css
+│   │   ├── 📄 main.jsx
+│   │   └── 🎨 tailwind-output.css
+│   ├── ⚙️ .gitignore
+│   ├── 🌐 index.html
+│   ├── ⚙️ package-lock.json
+│   ├── ⚙️ package.json
+│   ├── 📄 postcss.config.js
+│   ├── 📄 tailwind.config.js
+│   └── 📄 vite.config.js
+├── 📁 tests
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.21.05 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.21.15 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.21.24 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.21.33 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.21.43 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.21.53 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.22.02 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.22.21 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.23.45 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.23.53 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.24.03 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.24.15 PM.jpeg
+│   ├── 🖼️ WhatsApp Image 2026-04-22 at 10.24.24 PM.jpeg
+│   ├── 🐍 test_disputes.py
+│   └── 🐍 test_faraid.py
+├── 📁 ui
+│   ├── 🐍 __init__.py
+│   ├── 🐍 dispute_panel.py
+│   ├── 🐍 intake_wizard.py
+│   ├── 🐍 results_dashboard.py
+│   ├── 🐍 voice_interface.py
+│   └── 🐍 whatif_simulator.py
+├── ⚙️ .gitignore
+├── 📝 README.md
+├── 🐍 app.py
+├── 🖼️ image-1.png
+├── 🖼️ image-2.png
+├── 🖼️ image-3.png
+├── 🖼️ image-4.png
+├── 🖼️ image-5.png
+├── 🖼️ image-6.png
+├── 🖼️ image.png
+└── 📄 requirements.txt
+```
 
 ```
 
