@@ -2,9 +2,10 @@ import sys
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
-from app.core.logger import logger
-from app.api.v1.api import api_router
+from backend.app.core.config import settings
+from backend.app.core.logger import logger
+from backend.app.api.v1.api import api_router
+
 
 # Add project root to Python path so that core/, ai/, docs/ are importable
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
