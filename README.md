@@ -51,6 +51,7 @@ It calculates legal shares according to **Hanafi, Shia, Christian, and Hindu** l
 ---
 
 ## 📁 Project Structure
+```python
     HackDataV1/
 ├── backend/ # FastAPI backend
 │ ├── app/
@@ -83,6 +84,7 @@ It calculates legal shares according to **Hanafi, Shia, Christian, and Hindu** l
 │ └── templates/
 └── app.py (optional – legacy Streamlit app)
 
+```
 
 > **Note:** The `core/`, `ai/`, and `docs/` directories are **shared** between the Streamlit app and the FastAPI backend. The backend imports them directly (no duplication).
 
@@ -222,19 +224,6 @@ curl -X POST http://localhost:8000/api/v1/chat/ \
 | `/api/v1/verify/send-to-mufti` | POST | Email PDF to mufti (optional) |
 
 Full interactive documentation available at `http://localhost:8000/docs`.
-
-
-## 🖼️ Screenshots / Outputs
-
-| Calculator Page | Share Distribution | Tax Analysis |
-|----------------|--------------------|---------------|
-| (screenshot placeholder) | (screenshot placeholder) | (screenshot placeholder) |
-
-| Dispute Detection | Chatbot Interface | PDF Document |
-|--------------------|--------------------|---------------|
-| (screenshot placeholder) | (screenshot placeholder) | (screenshot placeholder) |
-
-**Tip:** You can generate sample PDFs from the “Documents” tab after a calculation.
 
 
 ## 🔮 Future Improvements
