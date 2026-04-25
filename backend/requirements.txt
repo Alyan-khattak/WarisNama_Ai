@@ -1,0 +1,18 @@
+# ===== Web Framework =====
+fastapi==0.115.11
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+
+# ===== Config & Validation =====
+pydantic==2.10.6
+python-dotenv==1.0.1
+
+# ===== HTTP / APIs =====
+httpx==0.28.1
+
+# ===== AI (keep minimal) =====
+groq>=1.2.0
+openai>=1.30.0
+
+# ===== PDF Generation =====
+reportlab==4.2.5
