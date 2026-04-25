@@ -52,8 +52,6 @@ It calculates legal shares according to **Hanafi, Shia, Christian, and Hindu** l
 
 ## 📁 Project Structure
 ```python
-
-```
 ├── 📁 ai
 │   ├── 🐍 __init__.py
 │   ├── 🐍 chatbot.py
@@ -212,9 +210,6 @@ It calculates legal shares according to **Hanafi, Shia, Christian, and Hindu** l
 ├── 🖼️ image.png
 └── 📄 requirements.txt
 ```
-
-```
-
 > **Note:** The `core/`, `ai/`, and `docs/` directories are **shared** between the Streamlit app and the FastAPI backend. The backend imports them directly (no duplication).
 
 ---
