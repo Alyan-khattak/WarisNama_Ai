@@ -1,7 +1,13 @@
+
+// //this will work `if crashed using test
+
+
+
 // import React, { useState } from 'react'
 // import toast from 'react-hot-toast'
 // import { CSVLink } from 'react-csv'
 // import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+// import MuftiVerificationModal from '../components/MuftiVerificationModal'
 
 // const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28DFF', '#FF6B6B', '#4ECDC4', '#45B7D1']
 
@@ -42,6 +48,8 @@
 //   const [tax, setTax] = useState(null)
 //   const [disputes, setDisputes] = useState(null)
 //   const [processSteps, setProcessSteps] = useState([])
+//   const [distributableEstate, setDistributableEstate] = useState(0)
+//   const [showMuftiModal, setShowMuftiModal] = useState(false)
 
 //   const handleChange = (e) => {
 //     const target = e.target
@@ -130,6 +138,7 @@
 //       if (sharesData.status !== 'success') throw new Error(sharesData.error || 'Calculation failed')
 //       const shares = sharesData.data.shares
 //       setResult(shares)
+//       setDistributableEstate(sharesData.data.distributable_estate || 0)
 
 //       // Tax
 //       const filerMap = {}
@@ -174,7 +183,7 @@
 //       })
 //       const disputeData = await disputeResp.json()
 //       let detected = disputeData.data
-//       // Fallback for demo: if backend returns no disputes but serious flags are true, create mock dispute
+//       // Fallback for demo
 //       if (detected.total_patterns_detected === 0 && (form.mutation_by_single_heir || form.no_succession_certificate || form.one_heir_wants_sell)) {
 //         detected = {
 //           flags_detected: [],
@@ -306,6 +315,36 @@
 //     }
 //   }
 
+//   const generateCertificateBlob = async () => {
+//     if (!result || Object.keys(result).length === 0) return null
+//     const firstHeir = Object.keys(result)[0]
+//     const pdfData = {
+//       deceased_name: 'Late Person',
+//       deceased_father: 'Father',
+//       death_date: new Date().toISOString().split('T')[0],
+//       sect: form.sect,
+//       total_estate: form.total_estate,
+//       heir_name: firstHeir,
+//       heir_cnic: 'XXXXX-XXXXXXX-X',
+//       heir_father: 'Father',
+//       heir_relationship: 'Legal Heir',
+//       shares: result,
+//       property_description: 'Inherited Property',
+//     }
+//     try {
+//       const response = await fetch('http://localhost:8000/api/v1/documents/share-certificate', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(pdfData),
+//       })
+//       const blob = await response.blob()
+//       return blob
+//     } catch (err) {
+//       toast.error('Failed to generate certificate for mufti')
+//       return null
+//     }
+//   }
+
 //   // Prepare chart data
 //   const pieData = result ? Object.entries(result).map(([name, data]) => ({
 //     name: name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
@@ -341,7 +380,6 @@
 //       )}
 
 //       <div className="bg-white p-6 rounded-lg shadow-md">
-//         {/* Form fields – omitted for brevity but same as previous working version */}
 //         <div className="grid grid-cols-2 gap-4">
 //           <div><label className="block text-sm font-medium">Sect</label><select name="sect" value={form.sect} onChange={handleChange} className="w-full border p-2 rounded"><option value="hanafi">Hanafi</option><option value="shia">Shia</option><option value="christian">Christian</option><option value="hindu">Hindu</option></select></div>
 //           <div><label className="block text-sm font-medium">Total Estate (PKR)</label><input type="number" name="total_estate" value={form.total_estate} onChange={handleChange} className="w-full border p-2 rounded" /></div>
@@ -500,14 +538,45 @@
 //             <button onClick={handleGeneratePDF} className="px-4 py-2 bg-blue-600 text-white rounded-md">Generate Share Certificate (PDF)</button>
 //             {shareTableRows.length > 0 && <CSVLink data={shareTableRows} filename="shares.csv" className="px-4 py-2 bg-green-600 text-white rounded-md">Download Shares CSV</CSVLink>}
 //             {tax && <CSVLink data={Object.entries(tax).map(([heir, t]) => ({ heir: heir.replace(/_/g, ' '), tax: t.advance_tax_236C, net: t.net_after_all_taxes }))} filename="tax.csv" className="px-4 py-2 bg-green-600 text-white rounded-md">Download Tax CSV</CSVLink>}
+            
+//             {/* Mufti Verification Button */}
+//             <button
+//               onClick={() => setShowMuftiModal(true)}
+//               className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-all"
+//             >
+//               🕌 Request Mufti Verification
+//             </button>
 //           </div>
 //         </div>
 //       )}
+
+//       {/* Mufti Verification Modal */}
+//       <MuftiVerificationModal
+//         isOpen={showMuftiModal}
+//         onClose={() => setShowMuftiModal(false)}
+//         results={{
+//           shares: result,
+//           tax_results: tax || {},
+//           disputes: disputes || {},
+//           sect: form.sect,
+//           debts: form.debts,
+//           funeral: form.funeral,
+//           wasiyyat: form.wasiyyat,
+//           minor: form.heir_age_under_18,
+//         }}
+//         totalEstate={form.total_estate}
+//         distributable={distributableEstate}
+//         generateCertificateBlob={generateCertificateBlob}
+//       />
 //     </div>
 //   )
 // }
 
 // export default CalculatorPage
+
+
+
+
 
 
 
@@ -518,6 +587,13 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveCo
 import MuftiVerificationModal from '../components/MuftiVerificationModal'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28DFF', '#FF6B6B', '#4ECDC4', '#45B7D1']
+
+// IMPORTANT: Change this to your Railway URL for production
+// For local development: 'http://localhost:8000/api/v1'
+// For production: 'https://warisnamaai-production.up.railway.app/api/v1'
+const API_BASE_URL = import.meta.env.PROD 
+  ? 'https://warisnamaai-production.up.railway.app/api/v1'
+  : 'http://localhost:8000/api/v1'
 
 const CalculatorPage = () => {
   const [loading, setLoading] = useState(false)
@@ -569,7 +645,7 @@ const CalculatorPage = () => {
     if (!nlpText.trim()) return
     setParsing(true)
     try {
-      const response = await fetch('http://localhost:8000/api/v1/nlp/parse', {
+      const response = await fetch(`${API_BASE_URL}/nlp/parse`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: nlpText }),
@@ -637,7 +713,7 @@ const CalculatorPage = () => {
 
     try {
       // Shares
-      const sharesResp = await fetch('http://localhost:8000/api/v1/calculate/', {
+      const sharesResp = await fetch(`${API_BASE_URL}/calculate/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -653,7 +729,7 @@ const CalculatorPage = () => {
       Object.keys(shares).forEach(heir => {
         filerMap[heir] = heir.includes('son') ? 'filer' : 'non_filer'
       })
-      const taxResp = await fetch('http://localhost:8000/api/v1/tax/calculate', {
+      const taxResp = await fetch(`${API_BASE_URL}/tax/calculate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -684,7 +760,7 @@ const CalculatorPage = () => {
         daughters_denied_share: form.daughters_denied_share,
         forced_relinquishment: form.forced_relinquishment,
       }
-      const disputeResp = await fetch('http://localhost:8000/api/v1/dispute/detect', {
+      const disputeResp = await fetch(`${API_BASE_URL}/dispute/detect`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ flags: disputeFlags }),
@@ -712,7 +788,7 @@ const CalculatorPage = () => {
 
       // Process steps
       const hasDispute = (detected.total_patterns_detected || 0) > 0
-      const stepsResp = await fetch('http://localhost:8000/api/v1/process/steps', {
+      const stepsResp = await fetch(`${API_BASE_URL}/process/steps`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -750,7 +826,7 @@ const CalculatorPage = () => {
       property_description: 'Inherited Property',
     }
     try {
-      const response = await fetch('http://localhost:8000/api/v1/documents/share-certificate', {
+      const response = await fetch(`${API_BASE_URL}/documents/share-certificate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pdfData),
@@ -779,7 +855,7 @@ const CalculatorPage = () => {
       subject: `Legal Notice Regarding ${top.pattern.replace(/_/g, ' ').toUpperCase()}`,
     }
     try {
-      const response = await fetch('http://localhost:8000/api/v1/documents/legal-notice', {
+      const response = await fetch(`${API_BASE_URL}/documents/legal-notice`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(noticeData),
@@ -805,7 +881,7 @@ const CalculatorPage = () => {
       offence_sections: 'PPC 498A',
     }
     try {
-      const response = await fetch('http://localhost:8000/api/v1/documents/fir', {
+      const response = await fetch(`${API_BASE_URL}/documents/fir`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(firData),
@@ -840,7 +916,7 @@ const CalculatorPage = () => {
       property_description: 'Inherited Property',
     }
     try {
-      const response = await fetch('http://localhost:8000/api/v1/documents/share-certificate', {
+      const response = await fetch(`${API_BASE_URL}/documents/share-certificate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pdfData),
