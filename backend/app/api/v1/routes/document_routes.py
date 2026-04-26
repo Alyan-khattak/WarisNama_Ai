@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel
 from typing import Dict, Optional
-from app.services.document_service import (
+from backend.app.services.document_service import (
     generate_share_certificate, generate_legal_notice, generate_fir,
     prepare_certificate_data
 )

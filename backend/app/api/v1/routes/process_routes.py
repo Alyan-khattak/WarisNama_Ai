@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
-from app.services.process_service import get_process_steps
+from backend.app.services.process_service import get_process_steps
 
 router = APIRouter(prefix="/process", tags=["Process"])
 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-from app.services.chat_service import ChatService
+from backend.app.services.chat_service import ChatService
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -26,7 +26,7 @@ async def chat(request: ChatRequest):
     
     # Get or create chatbot instance for this session
     if session_id not in chat_sessions:
-        from app.services.chat_service import ChatService
+        from backend.app.services.chat_service import ChatService
         chat_sessions[session_id] = ChatService()
     
     service = chat_sessions[session_id]

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.nlp_schemas import NLPRequest, NLPResponse
-from app.services.nlp_service import parse_natural_language
+from backend.app.schemas.nlp_schemas import NLPRequest, NLPResponse
+from backend.app.services.nlp_service import parse_natural_language
 
 router = APIRouter(prefix="/nlp", tags=["NLP"])
 

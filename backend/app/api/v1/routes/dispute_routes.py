@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Any
-from app.services.dispute_service import detect_disputes
+from backend.app.services.dispute_service import detect_disputes
 
 router = APIRouter(prefix="/dispute", tags=["Dispute"])
 

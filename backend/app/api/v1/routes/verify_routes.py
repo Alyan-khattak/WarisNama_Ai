@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from app.services.local_mufti_verification import (
+from backend.app.services.local_mufti_verification import (
     DEFAULT_MUFTI_EMAIL,
     MuftiVerificationError,
     build_verification_payload,

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict
-from app.services.tax_service import calculate_taxes
+from backend.app.services.tax_service import calculate_taxes
 
 router = APIRouter(prefix="/tax", tags=["Tax"])
 

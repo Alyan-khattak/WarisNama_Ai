@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 # Add project root to path
-from app.core.config import settings
+from backend.app.core.config import settings
 if str(settings.BASE_DIR) not in sys.path:
     sys.path.insert(0, str(settings.BASE_DIR))
 

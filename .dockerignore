@@ -1,0 +1,63 @@
+# Git
+.git
+.gitignore
+
+# Environment files (don't copy secrets into image)
+.env
+.env.local
+.env.*.local
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments (your local env folder)
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Frontend (build separately)
+frontend/
+node_modules/
+
+# Tests and images (not needed for backend)
+tests/
+*.jpeg
+*.jpg
+*.png
+*.gif
+*.ico
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# OS garbage
+.DS_Store
+Thumbs.db
+
+# Your local requirements file (root level)
+requirements.txt
+
+# UI folder (Streamlit - not needed for API)
+ui/
+
+# Old files
+*.pdf
+*.pyc

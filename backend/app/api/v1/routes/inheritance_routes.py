@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.inheritance_schemas import CalculationRequest, CalculationResponse
-from app.services.inheritance_service import calculate_inheritance
+from backend.app.schemas.inheritance_schemas import CalculationRequest, CalculationResponse
+from backend.app.services.inheritance_service import calculate_inheritance
 
 router = APIRouter(prefix="/calculate", tags=["Inheritance"])
 
